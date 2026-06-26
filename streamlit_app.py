@@ -157,7 +157,7 @@ st.markdown("""
 
 # -------------------- 配置参数（请根据您的模型修改） --------------------
 class Config:
-    model_path = '/Users/wutony/Desktop/rap_graphs/best_model_mel.pth'      # 模型文件路径
+    model_path = 'best_model_mel.pth'      # 模型文件路径
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     sample_rate = 22050
     duration = 5.0
