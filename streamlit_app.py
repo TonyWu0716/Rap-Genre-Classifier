@@ -7,7 +7,7 @@ import io
 
 # -------------------- 页面配置（必须放在最前面） --------------------
 st.set_page_config(
-    page_title="嘻哈风格识别 | 街头科幻",
+    page_title="Rap Genre Classifier",
     page_icon="🎧",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -155,9 +155,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# -------------------- 配置参数（请根据您的模型修改） --------------------
+
 class Config:
-    model_path = 'best_model_mel.pth'      # 模型文件路径
+    model_path = 'best_model_mel.pth'      
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     sample_rate = 22050
     duration = 5.0
@@ -167,7 +167,6 @@ class Config:
     img_height = 128
     img_width = 500
     num_classes = 8
-    # ⚠️ 请替换为您真实的7种风格名称，顺序必须与训练时严格一致
     class_names = [
         'Boombap', 'Drill', 'Glo', 'Memphis',
         'Pop_rap', 'Rage', 'Regalia','Trap'
@@ -235,7 +234,7 @@ def load_model():
     return model
 
 model = load_model()
-st.success("🎤 模型加载成功，等待音频上传...")
+st.success("🎤 Model Loaded! Waiting for upload...")
 
 # -------------------- 音频预处理函数（接收 bytes） --------------------
 def preprocess_audio_from_bytes(audio_bytes):
@@ -264,7 +263,7 @@ st.markdown("<h1>🎧 STREET WAVE</h1>", unsafe_allow_html=True)
 st.markdown("<div style='text-align: center'><div class='sub'>［ AI 嘻哈风格鉴定 | 霓虹熔炉 ］</div></div>", unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader(
-    "点击或拖拽上传 MP3 / WAV",
+    "Click or drag to upload MP3 / WAV",
     type=['mp3', 'wav'],
     label_visibility="collapsed"
 )
@@ -274,10 +273,10 @@ if uploaded_file is not None:
     audio_bytes = uploaded_file.read()
     
     # 显示音频播放器（增加“播放键”）
-    st.markdown("**🎵 试听片段**")
+    st.markdown("**🎵 Click to listen now**")
     st.audio(audio_bytes, format=uploaded_file.type)
     
-    with st.spinner("🔮 正在分析音频... 旋律抽取中"):
+    with st.spinner("🔮 Analyzing audio... Extracting melody"):
         try:
             input_tensor = preprocess_audio_from_bytes(audio_bytes)
             with torch.no_grad():
@@ -286,7 +285,7 @@ if uploaded_file is not None:
             results = {cfg.class_names[i]: float(probs[i]) * 100 for i in range(cfg.num_classes)}
             sorted_items = sorted(results.items(), key=lambda x: x[1], reverse=True)
 
-            st.markdown("### 🔥 风格成分分析")
+            st.markdown("### 🔥 Genre composition analysis")
             for genre, percent in sorted_items:
                 percent_fixed = f"{percent:.1f}%"
                 bar_html = f"""
@@ -300,13 +299,13 @@ if uploaded_file is not None:
                 """
                 st.markdown(bar_html, unsafe_allow_html=True)
 
-            with st.expander("📊 查看详细概率分布"):
+            with st.expander("📊 Classification detail"):
                 st.bar_chart(results)
 
             st.balloons()
-            st.markdown("<footer>⚡ CNN + LSTM + Attention · 实时推理 ⚡</footer>", unsafe_allow_html=True)
+            st.markdown("<footer>⚡ CNN + LSTM + Attention ⚡</footer>", unsafe_allow_html=True)
 
         except Exception as e:
-            st.error(f"处理出错: {str(e)}\n请检查文件格式或联系开发者")
+            st.error(f"Error: {str(e)}\nPlease check file format")
 else:
-    st.info("✨ 上传一首嘻哈 beats 或说唱，AI 将为你分析风格成分。")
+    st.info("✨ Upload a rap song, and let the program to analyze its genre!")
