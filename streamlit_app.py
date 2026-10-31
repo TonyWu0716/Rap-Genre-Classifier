@@ -259,8 +259,8 @@ def preprocess_audio_from_bytes(audio_bytes):
     return spec.to(cfg.device)
 
 # -------------------- UI 布局 --------------------
-st.markdown("<h1>🎧 STREET WAVE</h1>", unsafe_allow_html=True)
-st.markdown("<div style='text-align: center'><div class='sub'>［ AI 嘻哈风格鉴定 | 霓虹熔炉 ］</div></div>", unsafe_allow_html=True)
+st.markdown("<h1>🎧 New Blood Street Wave</h1>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center'><div class='sub'>［Rap Genre Classifier］</div></div>", unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader(
     "Click or drag to upload MP3 / WAV",
